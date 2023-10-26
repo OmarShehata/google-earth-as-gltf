@@ -1,0 +1,21 @@
+{
+  "name": "web-boilerplate-vite",
+  "version": "0.0.0",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "vite": "^2.7.2"
+  },
+  "dependencies": {
+    "@deck.gl/core": "^8.9.30",
+    "@loaders.gl/3d-tiles": "^3.4.14",
+    "@loaders.gl/core": "^3.4.14",
+    "@loaders.gl/polyfills": "^3.4.14",
+    "@loaders.gl/tiles": "^3.4.14",
+    "dat.gui": "^0.7.9",
+    "three": "^0.157.0"
+  }
+}
