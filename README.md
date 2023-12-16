@@ -2,9 +2,7 @@
 
 A little web app to demonstrate (1) how to fetch 3D Tiles from the [Google Photorealistic API](https://developers.google.com/maps/documentation/tile/3d-tiles) and (2) how to correctly normalize & rotate the glTF tiles, or combine a set of them into one glTF that can be rendered in any standard engine. 
 
-![](media/google-earth-3d-tiles.gif)
-
-https://github.com/OmarShehata/google-earth-as-gltf/raw/main/media/statue_of_liberty_tile_fetching.mp4
+![google-earth-3d-tiles](https://github.com/OmarShehata/google-earth-as-gltf/assets/1711126/b7cc93f2-8fe3-441c-916a-dc6cfa885509)
 
 ### How it works
 
@@ -23,3 +21,7 @@ Screen space error is a concept defined in the 3D Tiles specification, see: http
 
 - `npm install`
 - `npm run dev`
+
+### Another demo video
+
+https://github.com/OmarShehata/google-earth-as-gltf/assets/1711126/03fe3b48-fa39-48ba-b83a-772454949980
