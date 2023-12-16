@@ -1,0 +1,18 @@
+{
+  "name": "simple-node-example",
+  "version": "1.0.0",
+  "description": "",
+  "main": "fetch-tiles.js",
+  "scripts": {
+    "start": "node fetch-tiles.js"
+  },
+  "keywords": [],
+  "author": "",
+  "dependencies": {
+    "@deck.gl/core": "^8.9.33",
+    "@loaders.gl/3d-tiles": "^4.0.4",
+    "@loaders.gl/core": "^4.0.4",
+    "@loaders.gl/polyfills": "^4.0.4",
+    "@loaders.gl/tiles": "^4.0.4"
+  }
+}

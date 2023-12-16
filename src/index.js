@@ -1,59 +1,111 @@
 import { Viewer } from './Viewer.js'
+import { UI } from './UI.js'
+
 import {load} from '@loaders.gl/core';
 import {Tileset3D} from '@loaders.gl/tiles';
 import {Tiles3DLoader} from '@loaders.gl/3d-tiles';
 import {WebMercatorViewport} from '@deck.gl/core';
-import * as dat from 'dat.gui';
 
-
+// The viewer (1) sets up a ThreeJS scene,
+// (2) takes a set of glTF's and renders them normalized around (0,0,0) and oriented correctly
+// (3) can export this combined glTF
 const viewer = new Viewer()
+const ui = new UI()
+ui.onFetch = async () => {
+  ui.clearLog()
+  ui.log("Fetching...")
+  ui.fetchTilesBtn.disabled = true
 
-const gui = new dat.GUI();
-const params = {
-  'Google API Key': '',
-  'Fetch Google Earth 3D Tiles': () => {
-    console.log("Hello")
-  },
-  'Download': () => {
-    viewer.generateCombineGltf()
+  try {
+    await fetch3DTiles()
+  } catch (e) {
+    console.error(e)
+    ui.log(`Failed to fetch 3D Tiles! Error: ${e}`)
+  }
+  
+  ui.fetchTilesBtn.disabled = false
+}
+ui.onDownload = () => {
+  viewer.generateCombineGltf()
+}
+ui.onTileSliderChange = (value) => {
+  for (let i = 0; i < viewer.gltfArray.length; i++) {
+    const gltf = viewer.gltfArray[i]
+    gltf.scene.visible = i <= value 
   }
 }
-gui.add(params, 'Google API Key')
-gui.add(params, 'Fetch Google Earth 3D Tiles')
-gui.add(params, 'Download')
 
-async function run() {
-  const TARGET_SCREEN_SPACE_ERROR = 8
-  const GOOGLE_API_KEY = 'AIzaSyCoNisM6I1vb1I9eINi6ncucc8cFwCzzv0'
+// Here is where we actually get the 3D Tiles from the Google API
+// We use loadersgl to traverse the tileset until we get to the 
+// lat,lng,zoom we want, at the given screen space error
+// we end up with a list of glTF url's. Viewer is what finally
+// fetches them
+async function fetch3DTiles() {
+   ui.setDebugSliderVisibility(false)
+
+  const { lat, lng, zoom } = ui.getLatLngZoom()
+  const GOOGLE_API_KEY = ui.getGoogleAPIKey()
   const tilesetUrl = 'https://tile.googleapis.com/v1/3dtiles/root.json?key=' + GOOGLE_API_KEY;
+
+  const targetScreenSpaceError = ui.getScreenSpaceError()
+
+  ui.log(`Fetching tiles at (${lat} ${lng}, ${zoom}, sse: ${targetScreenSpaceError})`)
   const viewport = new WebMercatorViewport({ 
-    width: 600,
-    height: 400,
-    latitude: 40.7067584, 
-    longitude: -74.0115413, 
-    zoom: 16 
+    width: 230,
+    height: 175, // dimensions from the little map preview
+    latitude: lat,
+    longitude: lng,
+    zoom: zoom 
   });
 
-  const tileset = await load3DTileset(tilesetUrl, viewport, TARGET_SCREEN_SPACE_ERROR)
-  window.tileset = tileset
+  const tileset = await load3DTileset(tilesetUrl, viewport, targetScreenSpaceError)
   const sessionKey = getSessionKey(tileset)
-  const tiles = tileset.tiles
+  let tiles = tileset.tiles
+  // sort tiles to have the most accurate tiles first
+  tiles = tiles.sort((tileA, tileB) => {
+    return tileA.header.geometricError - tileB.header.geometricError
+  })
 
+  const glbUrls = []
   for (let i = 0; i < tiles.length; i++) {
     const tile = tiles[i]
-    const errorDiff = TARGET_SCREEN_SPACE_ERROR - tile.header.geometricError
-    if (errorDiff >= -1) {
+    const errorDiff = Math.abs(targetScreenSpaceError - tile.header.geometricError)
+    if (errorDiff <= targetScreenSpaceError) {
+      console.log(tile.header.geometricError)
       const url = `${tile.contentUrl}?key=${GOOGLE_API_KEY}&session=${sessionKey}`
-      viewer.loadGLTF(url)
+      glbUrls.push(url)
+    }
+
+    if (glbUrls.length > 100) {
+      ui.log("==== Exceeded maximum glTFs! Capping at 100 =====")
+      break
     }
   }
-}
-run()
 
-// for (let i = 0; i <= 10; i++) {
-//   const url = `/${i}.glb`
-//   viewer.loadGLTF(url)
-// }
+  if (glbUrls.length == 0) {
+    let firstSSEFound = null
+    for (let i = 0; i < tiles.length; i++) {
+        const tile = tiles[i]
+        if (firstSSEFound == null) firstSSEFound = Math.round(tile.header.geometricError)
+        const errorDiff = Math.abs(targetScreenSpaceError - tile.header.geometricError)
+        if (errorDiff <= firstSSEFound * 2) {
+
+          const url = `${tile.contentUrl}?key=${GOOGLE_API_KEY}&session=${sessionKey}`
+          glbUrls.push(url)
+        }
+
+        if (glbUrls.length > 100) {
+          ui.log("==== Exceeded maximum glTFs! Capping at 100 =====")
+          break
+        }
+    }
+    ui.log(`==== No tiles found for screen space error ${targetScreenSpaceError}. Getting tiles that are within 2x of ${firstSSEFound} ===`)
+  }
+
+  viewer.loadGLTFTiles(glbUrls, ui.log)
+  ui.setDebugSliderVisibility(true)
+  ui.updateDebugSliderRange(glbUrls.length)
+}
 
 async function load3DTileset(tilesetUrl, viewport, screenSpaceError) {
   const tilesetJson = await load(tilesetUrl, Tiles3DLoader, {'3d-tiles': { loadGLTF: false }} );

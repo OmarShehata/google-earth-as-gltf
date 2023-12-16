@@ -1,3 +1,113 @@
 html, body {
   margin: 0px;
+  overflow-x: hidden;
+}
+
+#settings {
+  position: fixed;
+  top: 16px;
+  left: 16px;
+  width: 250px;
+  border-radius: 12px;
+  background-color: #0f0f0fad;
+  border: 2px solid #ffffff3b;
+  color: white;
+  font-family: Quicksand;
+  
+}
+
+#centered-container {
+  text-align: center;
+}
+
+#map { 
+  height: 175px;
+}
+
+#map-container {
+  padding: 10px;
+}
+
+input {
+  padding: 5px;
+  border-radius: 5px;
+  text-align: center;
+}
+
+label {
+  padding: 5px;
+  display: block;
+}
+
+button {
+  padding: 5px;
+  margin: 5px;
+  cursor: pointer;
+  background: white;
+  border: 3px solid white;
+  box-sizing: border-box;
+  border-radius: 4px;
+  color: #000;
+}
+button:hover {
+  border: 3px solid #c3c1c1;
+}
+button[disabled] {
+  background-color:  #c3c1c1;
+  cursor: not-allowed;
+  border: 3px solid transparent;
+}
+button[disabled]:hover {
+  border: 3px solid transparent;
+}
+
+.settings-link {
+  color: white;
+  padding: 10px;
+}
+
+.log {
+  padding: 5px;
+  overflow-y: auto;
+  max-height: 100px;
+  display: none;
+  word-wrap: break-word;
+  text-wrap: balance;
+}
+
+#sse {
+  width: 70px;
+}
+
+#instructions {
+  display: none;
+  font-family: Quicksand;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  color: white;
+  background-color: rgba(0, 0, 0, 0.7);
+  padding: 10px;
+  border-radius: 10px;
+  transform: translate(-50%, -50%);
+  max-width: 350px;
+}
+
+#instructions a {
+  color: white;
+}
+
+#instructions li {
+  margin-bottom: 4px;
+}
+
+#fetch-tiles-instruction-text {
+  color: black;
+  background-color: white;
+  border-radius: 4px;
+  padding: 3px;
+}
+
+#debug-slider-container {
+  display: none;
 }
