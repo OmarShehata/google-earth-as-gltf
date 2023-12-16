@@ -4,6 +4,7 @@ A little web app to demonstrate (1) how to fetch 3D Tiles from the [Google Photo
 
 ![](media/google-earth-3d-tiles.gif)
 
+https://github.com/OmarShehata/google-earth-as-gltf/raw/main/media/statue_of_liberty_tile_fetching.mp4
 
 ### How it works
 
