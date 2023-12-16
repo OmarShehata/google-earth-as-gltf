@@ -24,6 +24,6 @@ Screen space error is a concept defined in the 3D Tiles specification, see: http
 - `npm install`
 - `npm run dev`
 
-### Another demo video
+### Video demo
 
 https://github.com/OmarShehata/google-earth-as-gltf/assets/1711126/03fe3b48-fa39-48ba-b83a-772454949980
