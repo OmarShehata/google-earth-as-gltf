@@ -4,6 +4,8 @@ A little web app to demonstrate (1) how to fetch 3D Tiles from the [Google Photo
 
 _NOTE: This is intended to be an educational tool to provide an easy way to experiment with the API and understand how to tweak different parameters like zoom & screen space error. See [Google's Map Tiles API policies](https://developers.google.com/maps/documentation/tile/policies) . Note especially that offline use is prohibited._
 
+### Try it here: https://omarshehata.github.io/google-earth-as-gltf/
+
 ![google-earth-3d-tiles](https://github.com/OmarShehata/google-earth-as-gltf/assets/1711126/b7cc93f2-8fe3-441c-916a-dc6cfa885509)
 
 ### How it works
