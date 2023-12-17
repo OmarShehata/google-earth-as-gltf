@@ -6,7 +6,8 @@ _NOTE: This is intended to be an educational tool to provide an easy way to expe
 
 ### Try it here: https://omarshehata.github.io/google-earth-as-gltf/
 
-![google-earth-3d-tiles](https://github.com/OmarShehata/google-earth-as-gltf/assets/1711126/b7cc93f2-8fe3-441c-916a-dc6cfa885509)
+https://github.com/OmarShehata/google-earth-as-gltf/assets/1711126/03fe3b48-fa39-48ba-b83a-772454949980
+
 
 ### How it works
 
@@ -25,7 +26,3 @@ Screen space error is a concept defined in the 3D Tiles specification, see: http
 
 - `npm install`
 - `npm run dev`
-
-### Video demo
-
-https://github.com/OmarShehata/google-earth-as-gltf/assets/1711126/03fe3b48-fa39-48ba-b83a-772454949980
