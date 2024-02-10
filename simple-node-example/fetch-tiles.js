@@ -20,9 +20,13 @@ async function run() {
   });
 
   console.log("Fetching tileset...")
-  const tilesetJson = await load(tilesetUrl, Tiles3DLoader, {'3d-tiles': { loadGLTF: false }} );
+  const tilesetJson = await load(tilesetUrl, Tiles3DLoader);
   const tileset3d = new Tileset3D(tilesetJson, {
     throttleRequests: false,
+    loadGLTF: false,
+    loadOptions: {
+      '3d-tiles': { loadGLTF: false },
+    },
     maximumScreenSpaceError: screenSpaceError
   })
   console.log("Traversing....")
