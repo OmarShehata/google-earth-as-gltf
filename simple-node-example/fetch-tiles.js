@@ -6,21 +6,22 @@ const { WebMercatorViewport } = require('@deck.gl/core');
 const { writeFile } = require('fs/promises');
 var fs = require('fs');
 
+const VERSION = "1.1.1"
+
 async function run() {
   const latitude = parseFloat(process.argv[2])
   const longitude = parseFloat(process.argv[3])
-  const object_name = process.argv[4]
-  if (isNaN(latitude) || isNaN(longitude) || (!object_name)) {
-    console.error('❗️ usage: node fetch-tiles latitude longitude object_name');
+  const output_path = process.argv[4]
+  if (isNaN(latitude) || isNaN(longitude) || (!output_path)) {
+    console.error('❗️ usage: node fetch-tiles latitude longitude output_path');
     process.exit(1);
   }
-  console.log(`fetch-tiles: (lat:${latitude},lon=${longitude}) -> ${object_name}`);
+  console.log(`fetch-tiles: (lat:${latitude},lon=${longitude}) -> ${output_path}`);
 
-  const object_path = `${process.env.ABCLI_OBJECT_ROOT}/${object_name}`
   // https://stackoverflow.com/a/26815894/17619982
-  if (!fs.existsSync(object_path)) {
-    fs.mkdirSync(object_path, { recursive: true });
-    console.log(`created ${object_path}`);
+  if (!fs.existsSync(output_path)) {
+    fs.mkdirSync(output_path, { recursive: true });
+    console.log(`created ${output_path}`);
   }
 
   // Get your key:
@@ -75,7 +76,7 @@ async function run() {
     }
     const arrayBuffer = await response.arrayBuffer();
     const buffer = Buffer.from(arrayBuffer);
-    await writeFile(`${object_path}/${i}.glb`, buffer);
+    await writeFile(`${output_path}/${i}.glb`, buffer);
   }
 
   // TODO: these glTF's are in ECEF coordinates
